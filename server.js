@@ -12,6 +12,8 @@ require('./config/db');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const productRouter = require('./routes/productRoutes')
+
 
 const server = express();
 
@@ -23,5 +25,6 @@ server.use(express.static(path.join(__dirname, 'public')));
 
 server.use('/', indexRouter);
 server.use('/users', usersRouter);
+server.use('/api/products', productRouter);
 
 module.exports = server;

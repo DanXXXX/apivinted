@@ -4,7 +4,7 @@
   "description": "création 'une api ecommerce clone vinted",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon ./bin/www -e *"
   },
   "author": "DanXXXX",
   "license": "MIT",
