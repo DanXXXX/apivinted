@@ -105,4 +105,28 @@ module.exports = {
             })
         } )
     },
+
+    remove: (req, res)=>{
+        const id = req.params.id;
+        ProductModel.findByIdAndRemove(id, (err, Product)=>{
+            if (err) {
+                return res.status(500).json({
+                    status: 500,
+                    message: 'Error when deleting Product',
+                    error: err
+                });
+            }
+            if (!Product) {
+                return res.status(404).json({
+                    status: 404,
+                    message: 'No such Product !'
+                })
+            }
+            return res.status(204).json({
+                status: 204,
+                message: 'Product Deleting !',
+               
+            });
+        })
+    }
 }
