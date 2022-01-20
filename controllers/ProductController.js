@@ -1,5 +1,5 @@
 const ProductModel = require('../models/ProductModel');
-
+const fs = require('fs');
 /**
  * 
  * ProductControllers.js
@@ -47,7 +47,8 @@ module.exports = {
 
     create: (req, res)=>{
         var Product = new ProductModel({
-            ...req.body
+            ...req.body,
+            image : `${req.protocol}://${req.get('host')}/images/products/${req.file.filename}`
         })
 
         Product.save((err, Product) =>{
@@ -84,10 +85,20 @@ module.exports = {
             Product.name = req.body.name ? req.body.name : Product.name;
             Product.description = req.body.description ? req.body.description : Product.desscription;
             Product.price = req.body.price ? req.body.price : Product.price;
+            //Product.image = req.body.image ? req.body.image : Product.image;
             Product.stock = req.body.stock ? req.body.stock : Product.stock;
-            Product.image = req.body.image ? req.body.image : Product.image;
             Product.userId = req.body.userId ? req.body.userId : Product.userId;
             Product.createdAt = req.body.createdAt ? req.body.createdAt : Product.createdAt;
+
+            if (req.file) {
+                const oldFilename = Product.image.split('/products/')[1];
+                Product.image = `${req.protocol}://${req.get('host')}/images/products/${req.file.filename}`;
+                fs.unlink(`public/images/Products/${oldFilename}`, (err)=>{
+                    if (err) {
+                        console.log(err.message);
+                    }
+                });
+            }
 
             Product.save((err, Product)=>{
                 if (err) {
@@ -122,6 +133,13 @@ module.exports = {
                     message: 'No such Product !'
                 })
             }
+            const Filename = Product.image.split('/products/')[1];
+            fs.unlink(`public/images/Products/${Filename}`, (err)=>{
+                if (err) {
+                    console.log(err.message);
+                }
+            });
+
             return res.status(204).json({
                 status: 204,
                 message: 'Product Deleting !',

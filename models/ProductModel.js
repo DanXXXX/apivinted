@@ -27,6 +27,7 @@ var ProductSchema = new mongoose.Schema({
     },
     image:{
         type:String,
+        required: true,
         default: "./uploads/profil/random-user.png",
         
     },
